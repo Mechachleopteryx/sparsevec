@@ -1,0 +1,254 @@
+TITLE: Compressing Sparse Big Data: A Case Study of Programming Styles
+AUTHOR: Hans Petter Langtangen at Center for Biomedical Computing, Simula Research Laboratory, & Department of Informatics, University of Oslo
+AUTHOR: Geir Kjetil Sandve at Department of Informatics, University of Oslo
+DATE: today
+
+# This document is written in Doconce, https://github.com/hplgit/doconce
+
+<%
+# Mako functions
+import os
+srcdir = 'src'
+
+def solution_file(name, regex={}):
+    """
+    Parameterize loading of solution file by CODE, or optionally a part
+    of a file from regex[CODE][0] to regex[CODE][1].
+
+    Return Doconce syntax for loading a source code file::
+
+        @@@CODE filename
+        @@@CODE filename fromto: from_regex@to_regex
+    """
+    if CODE == 'python':
+        name += '.py'
+    else:
+        raise ValueError('CODE=%s not supported' % CODE)
+    if os.path.isfile(os.path.join(srcdir, name)):
+        if regex:
+            return '@@@CODE %s fromto: %s@%s' % \
+                   (name, regex[CODE][0], regex[CODE][1])
+        else:
+            return '@@@CODE %s' % name
+%>
+
+_Future tasks:_
+
+ * Rewrite document in a language-neutral way with if-else
+   preprocessor directives for specific languages (Java, etc.)
+
+===== Project: Alternative software solutions for sparse data =====
+
+Many big data collections are *sparse*, meaning that a large portion
+of the data consists of zeros. In such cases, it is important to avoid
+storing the zeros. The purpose of this exercise is to compress a big
+data structure by storing the non-zeros only and adding information
+where the non-zeros appear in the original big data stream.
+Functionality for looking up an element (zero or non-zero) in the
+original stream must also be included.
+
+We assume that the data are available as a series of numbers in a
+(potentially huge) file. The numbers are to be read one by one and
+stored in a compressed data structure. We look at two alternative
+compressed data structures: a sparse vector and a hash.
+
+=== Sparse vector ===
+
+One can store all the non-zeroes consecutively in a vector
+(one-dimensional array) `data` and use another integer list/array
+`index` for the corresponding index in the original stream of
+numbers. For instance, `data[i]` holds the value of the number with
+position `index[i]` in the original stream.  As a specific example,
+consider the stream of numbers
+
+!bc
+0  1.1  3  0  0  0  5.1  -2  0  0  4  0  2  0  0  1  0
+!ec
+The data structure, referred to as a *sparse vector*, consists of the
+`data` list/array with elements
+
+!bc
+1.1  3  5.1  -2  4  2  1
+!ec
+and `index` with elements
+
+!bc
+1 2 6 7 10 12 15
+!ec
+Note that we index the elements in the original stream from 0.
+Also note that the `data` list/array must have numbers (not strings)
+that we can compute with.
+
+=== Hash ===
+
+A simpler data structure is to store the non-zeros in a hash
+(also called associative array or dictionary) with the original
+position in the stream as key and the non-zero number as value.
+For the stream of numbers above we get in Python the dictionary
+
+!bc pycod
+data_hash = {1: 1.1, 2: 3, 6: 5.1, 7: -2, 10: 4, 12: 2, 15: 1}
+!ec
+
+!bsubex
+file=sv_flat
+
+__Flat program.__
+Place the sample stream of numbers listed above in a file with
+multiple lines. Make a program that reads the numbers one by one from
+the file and creates the sparse vector representation and the
+hash. Open two new files and store the sparse vector and the hash,
+respectively.  Write out the value of the numbers with indices 10 and
+11 in the original stream.  Make a ``flat program'' without any use of
+functions.
+
+!bsol
+solution_file('sv_flat')
+!esol
+!esubex
+
+!bsubex
+file=sv_func
+
+__Function-based code.__
+
+ * Write a function `sparsevec(filename, outname=None)`
+   for reading a stream ofnumbers in a file with name `filename`
+   and returning a sparse vector representation. If the argument
+   `outname` is not `None`, the computed compressed data structure
+   is also dumped to the file with name `outname`.
+ * Write a similar function `hash(filename, outfile=None)` for
+   returning the hash representation of the data stream.
+ * Write two functions `sparsevec_index(i, data, index)` and
+   `hash_index(i, data_hash)` that return the value of the number with
+   position `i` in the original stream.
+ * Use the functions to solve the same problem as under *Flat program*.
+ * Make sure the program file can be reused later in other source code files.
+
+!bsol
+solution_file('sv_func')
+!esol
+
+!bremarks
+Finding the relation between the index in the original stream and
+the index in the sparse vector requires a search procedure which
+can be tedius. It is advantageous to add an inverse index mapping
+`inv_index` as an integer array with the property that
+`inv_index[index[i]] == i`.
+% if CODE == 'python'
+In Python, however, this functionality
+is present in list objects by the `index` method (if you use
+an integer NumPy array for the indices, you can use a list
+version of the array, obtained by the `tostring()` method, for
+index loop-up).
+% endif
+!eremarks
+!esubex
+
+!bsubex
+file=sv_index
+
+__Smarter index function.__
+Collect the arrays in the sparse vector representation in a hash or
+list such that the data structure is a single variable.  Then make a
+single `index(i, data)` function that can accept either a sparse
+vector or a hash as data structure, `data`, and return the value of
+the number in position `i` in the original data stream. Test that
+the new `index` function gives the same results as the alternative
+versions `sparsevec_index` and `hash_index`.
+
+!bsol
+solution_file('sv_index')
+
+!bnotice Comment
+Note the use of `i`, not `index`, as variable for storing the returned
+index array `sparsevec`. Use of `index` as variable name would hide
+the name of the new `index` function we wrote. Similarly,
+the data list returned from `sparsevec` is called `d` to avoid
+confusion with the name `data`, which is here used for the collection
+of `d` and `i` in a dictionary (hash).
+!enotice
+!esol
+!esubex
+
+% if CODE == 'python':
+!bsubex
+file=sparsebigdata
+
+__Module-based code.__
+Put the four functions created under *Function-based code* in a
+Python module called `sparsebigdata` with the functionality
+that it is not necessary to
+supply the compressed data structure every time we want to
+look up data given an index. More precisely, a user can
+do the following
+
+!bc pycod
+from sparsebigdata import index, load, save
+
+# Work with sparse vector representation
+load('mybigdatafile.dat', data_structure='sparsevec')
+print index(10), index(11)
+
+# Work with hash
+load('mybigdatafile.dat', data_structure='hash')
+print index(10), index(11)
+!ec
+Try to reuse as much as possible from previously made and tested code.
+
+!bhint Hint
+Let the sparse data structure `data` as introduced
+in c) be a global variable in the module.
+!ehint
+
+!bsol
+solution_file('sparsebigdata')
+!esol
+!esubex
+% endif
+
+!bsubex
+file=sv_class
+
+__Class-based code.__
+Make a class such that we can work with compressed sparse data
+in the following way:
+
+% if CODE == 'python':
+!bc pycod
+from sv_class import SparseBigData
+
+data = SparseBigData('mybigdatafile.dat', data_structure='sparsevec')
+# Look up original numbers no 10 and 11
+print data[10], data[11]
+# Print underlying data structure
+print data.sparsevec  # array of non-zeros
+print data.index      # array of original indices
+
+data = SparseBigData('mybigdatafile.dat', data_structure='hash')
+# Look up original numbers no 10 and 11
+print data[10], data[11]
+# Print underlying data structure
+print data.hash
+!ec
+% elif CODE == 'java':
+% endif
+
+!bsol
+solution_file('sv_class')
+!esol
+!esubex
+
+!bsubex
+__OO-based code.__
+Introduce a superclass `SparseBigData` and implement the functionality
+based on a sparse vector in a subclass `SparseVec` and the hash-based
+functionality in a subclass `Hash`.  Place as much code as possible
+in the superclass to be reused by subclasses.
+Rewrite the demo program above for the new class structure.
+
+!bquestion
+List pros and cons of the function-based, module-based, class-based, and
+oo-based code.
+!equestion
+!esubex
