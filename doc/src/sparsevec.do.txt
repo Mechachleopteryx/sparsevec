@@ -42,7 +42,7 @@ def solution_file(name, regex={}):
 __Summary.__ This document applies one specific
 example to illustrate the following different programming styles:
 flat program, function-based program, module-based program,
-class-based program, and object-oriented, class-based program.
+class-based program, and object-oriented program.
 
 
 ===== Project: Alternative software solutions for sparse data =====
