@@ -3,17 +3,23 @@ AUTHOR: Hans Petter Langtangen at Center for Biomedical Computing, Simula Resear
 AUTHOR: Geir Kjetil Sandve at Department of Informatics, University of Oslo
 DATE: today
 
-# This document is written in Doconce, https://github.com/hplgit/doconce
+# This document is written in Doconce, https://github.com/hplgit/doconce.
+# Language-specific terms and references are kept to a minimum in the
+# text and parameterized by the Mako variable CODE. Mako is used as
+# preprocessor. The advantage is that it is very easy to add Java
+# or other languages both in the exercises and the solutions.
 
 <%
 # Mako functions
 import os
-srcdir = 'src'
 
 def solution_file(name, regex={}):
     """
-    Parameterize loading of solution file by CODE, or optionally a part
-    of a file from regex[CODE][0] to regex[CODE][1].
+    Load a solution file into the document. Use the Mako variable CODE
+    to identify the language of the code and construct the relevant
+    Doconce line. A part of the solution file can also be loaded if
+    regex is given (dictionary of tuples):
+   from regex[CODE][0] to regex[CODE][1].
 
     Return Doconce syntax for loading a source code file::
 
@@ -22,20 +28,22 @@ def solution_file(name, regex={}):
     """
     if CODE == 'python':
         name += '.py'
+        srcdir = 'src-py'
     else:
         raise ValueError('CODE=%s not supported' % CODE)
-    if os.path.isfile(os.path.join(srcdir, name)):
+    filename = os.path.join(srcdir, name)
+    if os.path.isfile(filename):
         if regex:
-            return '@@@CODE %s fromto: %s@%s' % \
-                   (name, regex[CODE][0], regex[CODE][1])
+            return '@@@CODE %s fromto: %s@%s' % (filename, regex[CODE][0], regex[CODE][1])
         else:
-            return '@@@CODE %s' % name
+            return '@@@CODE %s' % filename
 %>
 
-_Future tasks:_
+__Summary.__ This document applies one specific
+example to illustrate the following different programming styles:
+flat program, function-based program, module-based program,
+class-based program, and object-oriented, class-based program.
 
- * Rewrite document in a language-neutral way with if-else
-   preprocessor directives for specific languages (Java, etc.)
 
 ===== Project: Alternative software solutions for sparse data =====
 
@@ -103,7 +111,7 @@ respectively.  Write out the value of the numbers with indices 10 and
 functions.
 
 !bsol
-solution_file('sv_flat')
+${solution_file('sv_flat')}
 !esol
 !esubex
 
@@ -126,7 +134,7 @@ __Function-based code.__
  * Make sure the program file can be reused later in other source code files.
 
 !bsol
-solution_file('sv_func')
+${solution_file('sv_func')}
 !esol
 
 !bremarks
@@ -135,7 +143,7 @@ the index in the sparse vector requires a search procedure which
 can be tedius. It is advantageous to add an inverse index mapping
 `inv_index` as an integer array with the property that
 `inv_index[index[i]] == i`.
-% if CODE == 'python'
+% if CODE == 'python':
 In Python, however, this functionality
 is present in list objects by the `index` method (if you use
 an integer NumPy array for the indices, you can use a list
@@ -158,7 +166,7 @@ the new `index` function gives the same results as the alternative
 versions `sparsevec_index` and `hash_index`.
 
 !bsol
-solution_file('sv_index')
+${solution_file('sv_index')}
 
 !bnotice Comment
 Note the use of `i`, not `index`, as variable for storing the returned
@@ -202,7 +210,7 @@ in c) be a global variable in the module.
 !ehint
 
 !bsol
-solution_file('sparsebigdata')
+${solution_file('sparsebigdata')}
 !esol
 !esubex
 % endif
@@ -235,7 +243,7 @@ print data.hash
 % endif
 
 !bsol
-solution_file('sv_class')
+${solution_file('sv_class')}
 !esol
 !esubex
 
