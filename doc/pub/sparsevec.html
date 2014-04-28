@@ -31,6 +31,7 @@ end of tocinfo -->
 <body>
 
     
+<!-- Bootstrap navigation bar -->
 <div class="navbar navbar-default navbar-fixed-top">
   <div class="navbar-header">
     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
@@ -58,6 +59,8 @@ end of tocinfo -->
 
 <div class="container">
 
+<p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p> <!-- add vertical space -->
+
 <!-- ------------------- main content ---------------------- -->
 
 
@@ -84,7 +87,7 @@ end of tocinfo -->
 <center>[1] <b>Center for Biomedical Computing, Simula Research Laboratory,</b></center>
 <center>[2] <b>Department of Informatics, University of Oslo</b></center>
 <p>
-<center><h4>Apr 23, 2014</h4></center> <!-- date -->
+<center><h4>Apr 28, 2014</h4></center> <!-- date -->
 <p>
 <!-- This document is written in Doconce, <a href="https://github.com/hplgit/doconce." target="_self"><tt>https://github.com/hplgit/doconce.</tt></a> -->
 <!-- Language-specific terms and references are kept to a minimum in the -->
@@ -107,9 +110,8 @@ class-based program, and object-oriented program.
 
 </div> <!-- end jumbotron -->
 
-<h3>Project 1: Alternative software solutions for sparse data  <a name="___sec0"></a></h3>
+<h2>Project 1: Alternative software solutions for sparse data  <a name="___sec0"></a></h2>
 
-<p>
 Many big data collections are <em>sparse</em>, meaning that a large portion
 of the data consists of zeros. In such cases, it is important to avoid
 storing the zeros. The purpose of this exercise is to compress a big
@@ -124,9 +126,8 @@ We assume that the data are available as a series of numbers in a
 stored in a compressed data structure. We look at two alternative
 compressed data structures: a sparse vector and a hash.
 
-<h4>Sparse vector  <a name="___sec1"></a></h4>
+<h3>Sparse vector  <a name="___sec1"></a></h3>
 
-<p>
 One can store all the non-zeroes consecutively in a vector
 (one-dimensional array) <code>data</code> and use another integer list/array
 <code>index</code> for the corresponding index in the original stream of
@@ -161,9 +162,8 @@ Note that we index the elements in the original stream from 0.
 Also note that the <code>data</code> list/array must have numbers (not strings)
 that we can compute with.
 
-<h4>Hash  <a name="___sec2"></a></h4>
+<h3>Hash  <a name="___sec2"></a></h3>
 
-<p>
 A simpler data structure is to store the non-zeros in a hash
 (also called associative array or dictionary) with the original
 position in the stream as key and the non-zero number as value.
@@ -189,10 +189,11 @@ Filename: <code>sv_flat</code>.
 <p>
 <!-- --- begin solution of exercise --- -->
 <b>Solution.</b>
-Code:
+Complete file: <a href="https://github.com/hplgit/sparsevec/blob/master/doc/src/src-py/sv_flat.py" target="_self"><tt>sv_flat.py</tt></a>.
+
 <p>
 
-<!-- code=python (from !bc pypro) typeset with pygments style "default" -->
+<!-- code=python (from !bc pycod) typeset with pygments style "default" -->
 <div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%">datafile <span style="color: #666666">=</span> <span style="color: #008000">open</span>(<span style="color: #BA2121">&#39;stream.dat&#39;</span>, <span style="color: #BA2121">&#39;r&#39;</span>)
 data <span style="color: #666666">=</span> []
 index <span style="color: #666666">=</span> []
@@ -222,17 +223,6 @@ outfile<span style="color: #666666">.</span>close()
 outfile <span style="color: #666666">=</span> <span style="color: #008000">open</span>(<span style="color: #BA2121">&#39;stream.svh&#39;</span>, <span style="color: #BA2121">&#39;w&#39;</span>)
 outfile<span style="color: #666666">.</span>write(<span style="color: #008000">repr</span>(data_hash) <span style="color: #666666">+</span> <span style="color: #BA2121">&#39;</span><span style="color: #BB6622; font-weight: bold">\n</span><span style="color: #BA2121">&#39;</span>)
 outfile<span style="color: #666666">.</span>close()
-
-<span style="color: #408080; font-style: italic"># Test of program</span>
-reference <span style="color: #666666">=</span> {<span style="color: #BA2121">&#39;data_hash&#39;</span>:
-             {<span style="color: #666666">1</span>: <span style="color: #666666">1.1</span>, <span style="color: #666666">2</span>: <span style="color: #666666">3</span>, <span style="color: #666666">6</span>: <span style="color: #666666">5.1</span>, <span style="color: #666666">7</span>: <span style="color: #666666">-2</span>, <span style="color: #666666">10</span>: <span style="color: #666666">4</span>, <span style="color: #666666">12</span>: <span style="color: #666666">2</span>, <span style="color: #666666">15</span>: <span style="color: #666666">1</span>},
-             <span style="color: #BA2121">&#39;data&#39;</span>:
-             [<span style="color: #666666">1.1</span>,  <span style="color: #666666">3</span>,  <span style="color: #666666">5.1</span>,  <span style="color: #666666">-2</span>,  <span style="color: #666666">4</span>,  <span style="color: #666666">2</span>,  <span style="color: #666666">1</span>],
-             <span style="color: #BA2121">&#39;index&#39;</span>:
-             [<span style="color: #666666">1</span>, <span style="color: #666666">2</span>, <span style="color: #666666">6</span>, <span style="color: #666666">7</span>, <span style="color: #666666">10</span>, <span style="color: #666666">12</span>, <span style="color: #666666">15</span>]}
-<span style="color: #008000; font-weight: bold">assert</span> index <span style="color: #666666">==</span> reference[<span style="color: #BA2121">&#39;index&#39;</span>]
-<span style="color: #008000; font-weight: bold">assert</span> data <span style="color: #666666">==</span> reference[<span style="color: #BA2121">&#39;data&#39;</span>]
-<span style="color: #008000; font-weight: bold">assert</span> data_hash <span style="color: #666666">==</span> reference[<span style="color: #BA2121">&#39;data_hash&#39;</span>]
 </pre></div>
 <p>
 <!-- --- end solution of exercise --- -->
@@ -240,8 +230,6 @@ reference <span style="color: #666666">=</span> {<span style="color: #BA2121">&#
 <p>
 <b>b)</b>
 <b>Function-based code.</b>
-<p>
-
 <ul>
  <li> Write a function <code>sparsevec(filename, outname=None)</code>
    for reading a stream ofnumbers in a file with name <code>filename</code>
@@ -272,10 +260,11 @@ Filename: <code>sv_func</code>.
 <p>
 <!-- --- begin solution of exercise --- -->
 <b>Solution.</b>
-Code:
+Complete file: <a href="https://github.com/hplgit/sparsevec/blob/master/doc/src/src-py/sv_func.py" target="_self"><tt>sv_func.py</tt></a>.
+
 <p>
 
-<!-- code=python (from !bc pypro) typeset with pygments style "default" -->
+<!-- code=python (from !bc pycod) typeset with pygments style "default" -->
 <div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">sparsevec</span>(filename, outname<span style="color: #666666">=</span><span style="color: #008000">None</span>):
     datafile <span style="color: #666666">=</span> <span style="color: #008000">open</span>(filename, <span style="color: #BA2121">&#39;r&#39;</span>)
     data <span style="color: #666666">=</span> []
@@ -322,47 +311,6 @@ Code:
 
 <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">hash_index</span>(i, data_hash):
     <span style="color: #008000; font-weight: bold">return</span> data_hash<span style="color: #666666">.</span>get(i, <span style="color: #666666">0</span>)
-
-<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">test_sparsevec</span>():
-    <span style="color: #408080; font-style: italic"># Test for data in stream.dat</span>
-    data_ref <span style="color: #666666">=</span> [<span style="color: #666666">1.1</span>,  <span style="color: #666666">3</span>,  <span style="color: #666666">5.1</span>,  <span style="color: #666666">-2</span>,  <span style="color: #666666">4</span>,  <span style="color: #666666">2</span>,  <span style="color: #666666">1</span>]
-    index_ref <span style="color: #666666">=</span> [<span style="color: #666666">1</span>, <span style="color: #666666">2</span>, <span style="color: #666666">6</span>, <span style="color: #666666">7</span>, <span style="color: #666666">10</span>, <span style="color: #666666">12</span>, <span style="color: #666666">15</span>]
-    sparsevec(<span style="color: #BA2121">&#39;stream.dat&#39;</span>, <span style="color: #BA2121">&#39;stream.svv&#39;</span>)
-    f <span style="color: #666666">=</span> <span style="color: #008000">open</span>(<span style="color: #BA2121">&#39;stream.svv&#39;</span>, <span style="color: #BA2121">&#39;r&#39;</span>)
-    data <span style="color: #666666">=</span> <span style="color: #008000">eval</span>(f<span style="color: #666666">.</span>readline())
-    index <span style="color: #666666">=</span> <span style="color: #008000">eval</span>(f<span style="color: #666666">.</span>readline())
-    f<span style="color: #666666">.</span>close()
-    <span style="color: #008000; font-weight: bold">assert</span> data <span style="color: #666666">==</span> data_ref
-    <span style="color: #008000; font-weight: bold">assert</span> index <span style="color: #666666">=</span> index_ref
-    <span style="color: #408080; font-style: italic"># Test indexing too</span>
-    <span style="color: #008000; font-weight: bold">assert</span> sparsevec_index(<span style="color: #666666">6</span>, data, index) <span style="color: #666666">==</span> <span style="color: #666666">3</span>
-    <span style="color: #008000; font-weight: bold">assert</span> sparsevec_index(<span style="color: #666666">9</span>, data, index) <span style="color: #666666">==</span> <span style="color: #666666">0</span>
-
-<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">test_hash</span>():
-    <span style="color: #408080; font-style: italic"># Test for data in stream.dat</span>
-    data_hash_ref <span style="color: #666666">=</span> {<span style="color: #666666">1</span>: <span style="color: #666666">1.1</span>, <span style="color: #666666">2</span>: <span style="color: #666666">3</span>, <span style="color: #666666">6</span>: <span style="color: #666666">5.1</span>, <span style="color: #666666">7</span>: <span style="color: #666666">-2</span>, <span style="color: #666666">10</span>: <span style="color: #666666">4</span>, <span style="color: #666666">12</span>: <span style="color: #666666">2</span>, <span style="color: #666666">15</span>: <span style="color: #666666">1</span>}
-    <span style="color: #008000">hash</span>(<span style="color: #BA2121">&#39;stream.dat&#39;</span>, <span style="color: #BA2121">&#39;stream.svh&#39;</span>)
-    f <span style="color: #666666">=</span> <span style="color: #008000">open</span>(<span style="color: #BA2121">&#39;stream.svh&#39;</span>, <span style="color: #BA2121">&#39;r&#39;</span>)
-    data_hash <span style="color: #666666">=</span> <span style="color: #008000">eval</span>(f<span style="color: #666666">.</span>readline())
-    f<span style="color: #666666">.</span>close()
-    <span style="color: #008000; font-weight: bold">assert</span> data_hash <span style="color: #666666">==</span> data_hash_ref
-    <span style="color: #408080; font-style: italic"># Test indexing too</span>
-    <span style="color: #008000; font-weight: bold">assert</span> hash_index(<span style="color: #666666">6</span>, data_hash) <span style="color: #666666">==</span> <span style="color: #666666">3</span>
-    <span style="color: #008000; font-weight: bold">assert</span> hash_index(<span style="color: #666666">9</span>, data_hash) <span style="color: #666666">==</span> <span style="color: #666666">0</span>
-
-<span style="color: #408080; font-style: italic"># &quot;Main program&quot; in function</span>
-<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">main</span>():
-    data, index <span style="color: #666666">=</span> sparsevec(<span style="color: #BA2121">&#39;stream.dat&#39;</span>, <span style="color: #BA2121">&#39;stream.svv&#39;</span>)
-    data_hash <span style="color: #666666">=</span> <span style="color: #008000">hash</span>(<span style="color: #BA2121">&#39;stream.dat&#39;</span>, <span style="color: #BA2121">&#39;stream.svh&#39;</span>)
-
-<span style="color: #008000; font-weight: bold">if</span> __name__ <span style="color: #666666">==</span> <span style="color: #BA2121">&#39;__main__&#39;</span>:
-    main()
-
-
-
-data <span style="color: #666666">=</span> datafile<span style="color: #666666">.</span>read()  <span style="color: #408080; font-style: italic"># string of numbers</span>
-numbers <span style="color: #666666">=</span> data<span style="color: #666666">.</span>split()  <span style="color: #408080; font-style: italic"># split wrt whitespace; result: list of strings</span>
-numbers <span style="color: #666666">=</span> [<span style="color: #008000">float</span>(n) <span style="color: #008000; font-weight: bold">for</span> n <span style="color: #AA22FF; font-weight: bold">in</span> numbers]  <span style="color: #408080; font-style: italic"># convert strings to floats</span>
 </pre></div>
 <p>
 <!-- --- end solution of exercise --- -->
@@ -382,10 +330,11 @@ Filename: <code>sv_index</code>.
 <p>
 <!-- --- begin solution of exercise --- -->
 <b>Solution.</b>
-Code:
+Complete file: <a href="https://github.com/hplgit/sparsevec/blob/master/doc/src/src-py/sv_index.py" target="_self"><tt>sv_index.py</tt></a>.
+
 <p>
 
-<!-- code=python (from !bc pypro) typeset with pygments style "default" -->
+<!-- code=python (from !bc pycod) typeset with pygments style "default" -->
 <div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">index</span>(i, data):
     <span style="color: #408080; font-style: italic"># Assume data is hash</span>
     <span style="color: #008000; font-weight: bold">if</span> <span style="color: #008000">len</span>(data) <span style="color: #666666">==</span> <span style="color: #666666">2</span>:
@@ -398,17 +347,6 @@ Code:
     <span style="color: #008000; font-weight: bold">else</span>:
         <span style="color: #408080; font-style: italic"># Hash representation</span>
         <span style="color: #008000; font-weight: bold">return</span> data<span style="color: #666666">.</span>get(i, <span style="color: #666666">0</span>)
-
-<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">test_index</span>():
-    <span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">sv_func</span> <span style="color: #008000; font-weight: bold">import</span> sparsevec, <span style="color: #008000">hash</span>, sparsevec_index, hash_index
-    d, i <span style="color: #666666">=</span> sparsevec(<span style="color: #BA2121">&#39;stream.dat&#39;</span>)
-    data_hash <span style="color: #666666">=</span> <span style="color: #008000">hash</span>(<span style="color: #BA2121">&#39;stream.dat&#39;</span>)
-    data <span style="color: #666666">=</span> {<span style="color: #BA2121">&#39;data&#39;</span>: d, <span style="color: #BA2121">&#39;index&#39;</span>: i}
-    <span style="color: #408080; font-style: italic"># Check one data item in the compressed structure and one zero</span>
-    <span style="color: #008000; font-weight: bold">assert</span> sparsevec_index(<span style="color: #666666">3</span>, d, i) <span style="color: #666666">==</span> index(<span style="color: #666666">3</span>, d)
-    <span style="color: #008000; font-weight: bold">assert</span> hash_index(<span style="color: #666666">3</span>, data_hash) <span style="color: #666666">==</span> index(<span style="color: #666666">3</span>, data_hash)
-    <span style="color: #008000; font-weight: bold">assert</span> sparsevec_index(<span style="color: #666666">9</span>, d, i) <span style="color: #666666">==</span> index(<span style="color: #666666">9</span>, d)
-    <span style="color: #008000; font-weight: bold">assert</span> hash_index(<span style="color: #666666">9</span>, data_hash) <span style="color: #666666">==</span> index(<span style="color: #666666">9</span>, data_hash)
 </pre></div>
 <p>
 <div class="alert alert-block alert-success alert-text-normal"><b>Comment.</b>
@@ -465,10 +403,11 @@ Filename: <code>sparsebigdata</code>.
 <p>
 <!-- --- begin solution of exercise --- -->
 <b>Solution.</b>
-Code:
+Complete file: <a href="https://github.com/hplgit/sparsevec/blob/master/doc/src/src-py/sparsebigdata.py" target="_self"><tt>sparsebigdata.py</tt></a>.
+
 <p>
 
-<!-- code=python (from !bc pypro) typeset with pygments style "default" -->
+<!-- code=python (from !bc pycod) typeset with pygments style "default" -->
 <div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">sv_func</span> <span style="color: #008000; font-weight: bold">import</span> sparsevec, <span style="color: #008000">hash</span>
 <span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">sv_index</span> <span style="color: #008000; font-weight: bold">import</span> index <span style="color: #008000; font-weight: bold">as</span> _index
 
@@ -484,22 +423,6 @@ data <span style="color: #666666">=</span> {}  <span style="color: #408080; font
 
 <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">index</span>(i):
     <span style="color: #008000; font-weight: bold">return</span> _index(i, data)
-
-<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">test_index</span>():
-    <span style="color: #008000; font-weight: bold">for</span> representation <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #BA2121">&#39;sparsevec&#39;</span>, <span style="color: #BA2121">&#39;hash&#39;</span>:
-        load(<span style="color: #BA2121">&#39;stream.dat&#39;</span>, representation)
-        <span style="color: #008000; font-weight: bold">assert</span> index(<span style="color: #666666">6</span>) <span style="color: #666666">==</span> <span style="color: #666666">3</span>
-        <span style="color: #008000; font-weight: bold">assert</span> index(<span style="color: #666666">9</span>) <span style="color: #666666">==</span> <span style="color: #666666">0</span>
-
-<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">main</span>():
-    <span style="color: #408080; font-style: italic"># Example from the exercise</span>
-    load(<span style="color: #BA2121">&#39;stream.dat&#39;</span>)
-    <span style="color: #008000; font-weight: bold">print</span> index(<span style="color: #666666">10</span>), index(<span style="color: #666666">11</span>)
-    load(<span style="color: #BA2121">&#39;stream.dat&#39;</span>, <span style="color: #BA2121">&#39;hash&#39;</span>)
-    <span style="color: #008000; font-weight: bold">print</span> index(<span style="color: #666666">10</span>), index(<span style="color: #666666">11</span>)
-
-<span style="color: #008000; font-weight: bold">if</span> __name__ <span style="color: #666666">==</span> <span style="color: #BA2121">&#39;__main__&#39;</span>:
-    main()
 </pre></div>
 <p>
 <!-- --- end solution of exercise --- -->
@@ -534,10 +457,11 @@ Filename: <code>sv_class</code>.
 <p>
 <!-- --- begin solution of exercise --- -->
 <b>Solution.</b>
-Code:
+Complete file: <a href="https://github.com/hplgit/sparsevec/blob/master/doc/src/src-py/sv_class.py" target="_self"><tt>sv_class.py</tt></a>.
+
 <p>
 
-<!-- code=python (from !bc pypro) typeset with pygments style "default" -->
+<!-- code=python (from !bc pycod) typeset with pygments style "default" -->
 <div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">sv_func</span> <span style="color: #008000; font-weight: bold">import</span> sparsevec, <span style="color: #008000">hash</span>
 <span style="color: #008000; font-weight: bold">from</span> <span style="color: #0000FF; font-weight: bold">sv_index</span> <span style="color: #008000; font-weight: bold">import</span> index <span style="color: #008000; font-weight: bold">as</span> _index
 
@@ -553,12 +477,6 @@ Code:
 
     <span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">__getitem__</span>(<span style="color: #008000">self</span>, i):
         <span style="color: #008000; font-weight: bold">return</span> _index(i, <span style="color: #008000">self</span><span style="color: #666666">.</span>data)
-
-<span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">test_SparseBigData</span>():
-    <span style="color: #008000; font-weight: bold">for</span> representation <span style="color: #AA22FF; font-weight: bold">in</span> <span style="color: #BA2121">&#39;sparsevec&#39;</span>, <span style="color: #BA2121">&#39;hash&#39;</span>:
-        d <span style="color: #666666">=</span> SparseBigData(<span style="color: #BA2121">&#39;stream.dat&#39;</span>, representation)
-        <span style="color: #008000; font-weight: bold">assert</span> d[<span style="color: #666666">6</span>] <span style="color: #666666">==</span> <span style="color: #666666">3</span>
-        <span style="color: #008000; font-weight: bold">assert</span> d[<span style="color: #666666">9</span>] <span style="color: #666666">==</span> <span style="color: #666666">0</span>
 </pre></div>
 <p>
 <!-- --- end solution of exercise --- -->
@@ -588,6 +506,12 @@ oo-based code.
 <!-- include javascript, jQuery *first* -->
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+<!-- Bootstrap footer
+<footer>
+<a href="http://..."><img width="250" align=right src="http://..."></a>
+</footer>
+-->
 
 
 </body>

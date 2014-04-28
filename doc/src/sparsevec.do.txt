@@ -19,7 +19,7 @@ def solution_file(name, regex={}):
     to identify the language of the code and construct the relevant
     Doconce line. A part of the solution file can also be loaded if
     regex is given (dictionary of tuples):
-   from regex[CODE][0] to regex[CODE][1].
+    from regex[CODE][0] to regex[CODE][1].
 
     Return Doconce syntax for loading a source code file::
 
@@ -111,7 +111,10 @@ respectively.  Write out the value of the numbers with indices 10 and
 functions.
 
 !bsol
-${solution_file('sv_flat')}
+Complete file: "`sv_flat.${EXT}`": "https://github.com/hplgit/sparsevec/blob/master/doc/src/src-${EXT}/sv_flat.py".
+
+${solution_file('sv_flat',
+regex=dict(python=('datafile = open', '# Test of program')))}
 !esol
 !esubex
 
@@ -134,7 +137,10 @@ __Function-based code.__
  * Make sure the program file can be reused later in other source code files.
 
 !bsol
-${solution_file('sv_func')}
+Complete file: "`sv_func.${EXT}`": "https://github.com/hplgit/sparsevec/blob/master/doc/src/src-${EXT}/sv_func.py".
+
+${solution_file('sv_func',
+regex=dict(python=('def sparsevec', 'def test_sparsevec')))}
 !esol
 
 !bremarks
@@ -166,7 +172,10 @@ the new `index` function gives the same results as the alternative
 versions `sparsevec_index` and `hash_index`.
 
 !bsol
-${solution_file('sv_index')}
+Complete file: "`sv_index.${EXT}`": "https://github.com/hplgit/sparsevec/blob/master/doc/src/src-${EXT}/sv_index.py".
+
+${solution_file('sv_index',
+regex=dict(python=('def index', 'def test_')))}
 
 !bnotice Comment
 Note the use of `i`, not `index`, as variable for storing the returned
@@ -210,7 +219,10 @@ in c) be a global variable in the module.
 !ehint
 
 !bsol
-${solution_file('sparsebigdata')}
+Complete file: "`sparsebigdata.${EXT}`": "https://github.com/hplgit/sparsevec/blob/master/doc/src/src-${EXT}/sparsebigdata.py".
+
+${solution_file('sparsebigdata',
+regex=dict(python=('from sv_func', 'def test_index')))}
 !esol
 !esubex
 % endif
@@ -243,7 +255,10 @@ print data.hash
 % endif
 
 !bsol
-${solution_file('sv_class')}
+Complete file: "`sv_class.${EXT}`": "https://github.com/hplgit/sparsevec/blob/master/doc/src/src-${EXT}/sv_class.py".
+
+${solution_file('sv_class',
+regex=dict(python=('from sv_func', 'def test_Sparse')))}
 !esol
 !esubex
 
