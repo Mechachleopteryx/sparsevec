@@ -128,7 +128,7 @@ __Function-based code.__
    and returning a sparse vector representation. If the argument
    `outname` is not `None`, the computed compressed data structure
    is also dumped to the file with name `outname`.
- * Write a similar function `hash(filename, outfile=None)` for
+ * Write a similar function `hash(filename, outname=None)` for
    returning the hash representation of the data stream.
  * Write two functions `sparsevec_index(i, data, index)` and
    `hash_index(i, data_hash)` that return the value of the number with
